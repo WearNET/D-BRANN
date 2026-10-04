@@ -1,0 +1,11 @@
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_000.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_001.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_002.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_003.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_004.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_005.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_006.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_007.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_008.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_009.pt
+C:\Users\kevin\D-BRANN\data\dataset_train\DBRAN_OptiTrack\optitrack_010.pt

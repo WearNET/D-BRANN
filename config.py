@@ -1,0 +1,72 @@
+r"""
+    Config for paths, joint set, and normalizing scales.
+"""
+
+from main_path import (
+    DATA_DIR,
+    DATASET_RAW_DIR,
+    DATASET_WORK_DIR,
+    SMPL_MODEL_FILE,
+    TRANSPOSE_WEIGHTS_FILE,
+)
+
+
+# datasets (directory names) in AMASS
+# e.g., for ACCAD, the path should be `paths.raw_amass_dir/ACCAD/ACCAD/s001/*.npz`
+amass_data = ['HumanEva', 'MPI_HDM05', 'SFU', 'MPI_mosh', 'Transitions_mocap', 'SSM_synced', 'CMU',
+              'Eyes_Japan_Dataset', 'KIT', 'BMLmovi', 'EKUT', 'TCD_handMocap', 'ACCAD',
+              'BMLhandball', 'MPI_Limits', 'DFaust_67']
+# amass_data = ['TotalCapture']
+
+
+class paths:
+    raw_amass_dir = str(DATASET_RAW_DIR / "AMASS")      # raw AMASS dataset path (raw_amass_dir/ACCAD/ACCAD/s001/*.npz)
+    amass_dir = str(DATASET_WORK_DIR / "AMASS")         # output path for the synthetic AMASS dataset
+
+    raw_dipimu_dir = str(DATASET_RAW_DIR / "DIP_IMU")   # raw DIP-IMU dataset path (raw_dipimu_dir/s_01/*.pkl)
+    dipimu_dir = str(DATASET_WORK_DIR / "DIP_IMU")      # output path for the preprocessed DIP-IMU dataset
+
+    # DIP recalculates the SMPL poses for TotalCapture dataset. You should acquire the pose data from the DIP website.
+    raw_totalcapture_dip_dir = str(DATASET_RAW_DIR / "TotalCapture" / "DIP_recalculate")  # contain ground-truth SMPL pose (*.pkl)
+    raw_totalcapture_official_dir = str(DATASET_RAW_DIR / "TotalCapture" / "official")    # contain official gt (S1/acting1/gt_skel_gbl_pos.txt)
+    totalcapture_dir = str(DATASET_WORK_DIR / "TotalCapture")          # output path for the preprocessed TotalCapture dataset
+
+    example_dir = str(DATA_DIR / "example")                    # example IMU measurements
+    smpl_file = str(SMPL_MODEL_FILE)          # official SMPL model path
+    weights_file = str(TRANSPOSE_WEIGHTS_FILE)                # network weight file
+    # weights_file = 'weights/kevin_full_pipeline.pt'
+
+    ################ MyData set Paths ################
+    raw_mbientlab = str(DATASET_RAW_DIR / "Mbientlab")  # raw Mbientlab dataset path
+    mbientlab_dir = str(DATASET_WORK_DIR / "Mbientlab")  # processed Mbientlab dataset path
+    raw_Optitrack = str(DATASET_RAW_DIR / "OptiTrack")  # raw Optitrack dataset path
+    optitrack_dir = str(DATASET_WORK_DIR / "OptiTrack")  # processed Optitrack dataset path
+
+
+
+class joint_set:
+    leaf = [7, 8, 12, 20, 21]
+    full = list(range(1, 24))
+    reduced = [1, 2, 3, 4, 5, 6, 9, 12, 13, 14, 15, 16, 17, 18, 19]
+    ignored = [0, 7, 8, 10, 11, 20, 21, 22, 23]
+
+    lower_body = [0, 1, 2, 4, 5, 7, 8, 10, 11]
+    lower_body_parent = [None, 0, 0, 1, 2, 3, 4, 5, 6]
+
+    n_leaf = len(leaf)
+    n_full = len(full)
+    n_reduced = len(reduced)
+    n_ignored = len(ignored)
+
+
+acc_scale = 30
+vel_scale = 3
+
+class train:
+    '''
+    Batch size of 256 using an Adam [Kingma and Ba 2014] optimizer with a learning rate lr = 10−3 from the paper.
+    '''
+    epochs = 3000
+    batch_size = 256
+    learning_rate = 10e-3
+    optimizer_str = 'Adam'

@@ -1,0 +1,46 @@
+{
+  "format_version": 1,
+  "created_utc": "EXAMPLE_ONLY",
+  "reference_role": "root",
+  "update_rate_hz": 60,
+  "sensor_roles": [
+    "left_arm",
+    "right_arm",
+    "left_leg",
+    "right_leg",
+    "head",
+    "root"
+  ],
+  "device_ids": [
+    "REPLACE_LEFT_ARM",
+    "REPLACE_RIGHT_ARM",
+    "REPLACE_LEFT_LEG",
+    "REPLACE_RIGHT_LEG",
+    "REPLACE_HEAD",
+    "REPLACE_ROOT"
+  ],
+  "global_to_dbran": [
+    [1.0, 0.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0]
+  ],
+  "device_to_bone": [
+    [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+    [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+    [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+    [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+    [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+    [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+  ],
+  "acceleration_offsets": [
+    [0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0]
+  ],
+  "metadata": {
+    "note": "Schema example only. Generate the real file with calibrate_xsens.py."
+  }
+}

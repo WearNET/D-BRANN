@@ -1,0 +1,98 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Datasets and generated training data
+data/dataset_raw/
+data/dataset_work/
+data/dataset_train/*
+!data/dataset_train/test.txt
+!data/dataset_train/test_pose_s1.txt
+!data/dataset_train/test_pose_s1_pred.txt
+!data/dataset_train/test_pose_s2.txt
+!data/dataset_train/test_pose_s2_gt.txt
+!data/dataset_train/test_pose_s2_pred.txt
+!data/dataset_train/test_pose_s3.txt
+!data/dataset_train/test_pose_s3_pred.txt
+!data/dataset_train/train_pose.txt
+!data/dataset_train/train_pose_augmented.txt
+!data/dataset_train/train_pose_dbran_optitrack.txt
+!data/dataset_train/train_pose_s1.txt
+!data/dataset_train/train_pose_s1_augmented.txt
+!data/dataset_train/train_pose_s1_dbran_optitrack.txt
+!data/dataset_train/train_pose_s1_pred.txt
+!data/dataset_train/train_pose_s1_pred_dbran_optitrack.txt
+!data/dataset_train/train_pose_s2.txt
+!data/dataset_train/train_pose_s2_dbran_optitrack.txt
+!data/dataset_train/train_pose_s2_gt.txt
+!data/dataset_train/train_pose_s2_gt_augmented.txt
+!data/dataset_train/train_pose_s2_gt_dbran_optitrack.txt
+!data/dataset_train/train_pose_s2_pred.txt
+!data/dataset_train/train_pose_s2_pred_dbran_optitrack.txt
+!data/dataset_train/train_pose_s3.txt
+!data/dataset_train/train_pose_s3_dbran_optitrack.txt
+!data/dataset_train/train_pose_s3_pred.txt
+!data/dataset_train/train_pose_s3_pred_dbran_optitrack.txt
+data/basicmodel_m_lbs_10_207_0_v1.0.0.pkl
+data/example/
+
+# Binary artifacts not distributed with the repository
+*.pkl
+*.joblib
+*.npy
+*.npz
+
+# New training outputs
+checkpoints/retrained/
+
+# Experiment outputs
+results/
+wandb/
+runs/
+logs/
+sector_logs/
+*.log
+
+# Paper writeup scripts (figures/statistics for the manuscript, not part
+# of the D-BRAN codebase itself)
+scripts/figures/
+scripts/analysis/
+scripts/robustness/
+scripts/qualitative_error/
+
+# Ablation study infrastructure (useful for future publications, kept
+# local-only -- see ablation_test/README.md)
+ablation_test/
+
+# Videos
+*.mp4
+*.avi
+*.mov
+*.gif
+
+# Local maintenance files
+dbran_inventory.txt
+
+# Operating systems
+.DS_Store
+Thumbs.db
+
+# Xsens
+native/xsens_bridge/build/
+native/xsens_bridge/data/logs/
