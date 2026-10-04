@@ -1,0 +1,58 @@
+---
+title: "Evaluation and profiling"
+---
+
+## Smoke test
+
+The following command loads every checkpoint and evaluates a single sequence (`--max_sequences 1`), purely to confirm the code path runs end to end — it is not a representative evaluation:
+
+```bash
+python scripts/profile/profile_full_pipeline.py \
+  --raw_list_file data/dataset_train/test.txt \
+  --max_sequences 1 \
+  --profile_repeat 1
+```
+
+This verifies:
+
+- original TransPose checkpoint loading
+- all five Pose-S1 branches
+- all five Pose-S2 branches
+- all five Pose-S3 branches
+- learned rotation fusion
+- original Trans-B1 and Trans-B2
+- offline pose evaluation
+- throughput and CUDA-memory profiling
+
+Each training script's argparse defaults reproduce the original D-BRANN study exactly (same hyperparameters, same data splits), so running a script without overriding its defaults is the correct way to redo a stage identically — see [Checkpoints → Retraining](checkpoints.qmd#retraining) for which output paths need to be redirected to avoid overwriting a validated checkpoint.
+
+## Full offline evaluation
+
+```bash
+python scripts/profile/profile_full_pipeline.py \
+  --raw_list_file data/dataset_train/test.txt \
+  --profile_repeat 1
+```
+
+## Online protocol
+
+```bash
+python scripts/profile/profile_full_pipeline.py \
+  --raw_list_file data/dataset_train/test.txt \
+  --evaluate_online \
+  --profile_repeat 1
+```
+
+The profiler reports:
+
+- SIP error
+- angular error
+- positional error
+- mesh error
+- jitter
+- parameter count
+- time per frame
+- throughput
+- peak CUDA memory
+
+The optional robustness hook is not part of the final pipeline. A message indicating that `robustness_full_pipeline_hook` is unavailable can be ignored during standard evaluation.

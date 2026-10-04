@@ -1,0 +1,69 @@
+---
+title: "D-BRANN"
+subtitle: "Distributed pose estimation from sparse IMUs"
+---
+
+**D-BRANN** is a distributed bidirectional recurrent architecture for full-body human pose estimation from six sparse inertial measurement units (IMUs).
+
+D-BRANN builds on the excellent work of [TransPose](https://github.com/Xinyu-Yi/TransPose) (Yi et al.), whose centralized architecture and translation modules (Trans-B1, Trans-B2) form the foundation this project extends into a distributed, branch-based design.
+
+D-BRANN estimates full-body pose using six IMUs placed on:
+
+- left forearm
+- right forearm
+- left lower leg
+- right lower leg
+- head
+- root/pelvis
+
+The architecture preserves the staged pose-estimation strategy while distributing the computation across anatomical branches.
+
+```{mermaid}
+flowchart TD
+    IMU["Six sparse IMUs"] --> ROOT["Shared root reference"]
+    ROOT --> LL["Left-leg branch"]
+    ROOT --> RL["Right-leg branch"]
+    ROOT --> TH["Trunk-head branch"]
+    ROOT --> LA["Left-arm branch"]
+    ROOT --> RA["Right-arm branch"]
+    LL & RL & TH & LA & RA --> S1["Pose-S1<br/>distributed leaf-joint position estimation"]
+    S1 --> S2["Pose-S2<br/>distributed full-joint position estimation"]
+    S2 --> S3["Pose-S3<br/>distributed reduced-joint rotation estimation"]
+    S3 --> FUSION["Learned residual rotation fusion"]
+    FUSION --> POSE["Full SMPL pose"]
+```
+
+The original TransPose `Trans-B1` and `Trans-B2` modules are retained for translation estimation.
+
+## Final architecture
+
+| Stage | Organization | Hidden size | Output |
+|---|---:|---:|---|
+| Pose-S1 | 5 distributed branches | 32 | Leaf-joint positions |
+| Pose-S2 | 5 distributed branches | 16 | Full-joint positions by anatomical branch |
+| Pose-S3 | 5 distributed branches | 16 | Reduced-joint 6D rotations by anatomical branch |
+| Rotation fusion | Learned residual fusion | 16 | Refined 90-dimensional rotation representation |
+| Translation | Original Trans-B1 and Trans-B2 | Original configuration | Root translation |
+
+Pose-S1 uses one local IMU and the shared root IMU for each branch. Pose-S2 and Pose-S3 continue the distributed processing with branch-specific joint subsets. The fusion network refines the assembled Pose-S3 output before conversion to the full SMPL pose.
+
+### Parameter count
+
+The current full-pipeline profiler reports:
+
+| Pipeline | Parameters | FP32 parameter size |
+|---|---:|---:|
+| Original TransPose full pipeline | 4,798,771 | 18.306 MB |
+| D-BRANN pose pipeline + original Trans-B1/B2 | 1,603,357 | 6.116 MB |
+
+The resulting parameter ratio is **0.3341**, corresponding to approximately **66.6% fewer parameters** than the original full pipeline.
+
+## Where to go next
+
+- [Repository structure](structure.qmd) — how the codebase is organized
+- [Environment](environment.qmd) — set up the Conda environment
+- [Checkpoints](checkpoints.qmd) — the validated model weights
+- [Data](data.qmd) — datasets, SMPL assets, and staged training tensors
+- [Training and data preparation](training.qmd) — the staged training workflow
+- [Evaluation and profiling](evaluation.qmd) — running the smoke test and full evaluation
+- [Xsens integration](xsens-calibration.qmd) — calibration, live inference, and Unity streaming

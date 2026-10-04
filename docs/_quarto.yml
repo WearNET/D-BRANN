@@ -1,0 +1,51 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "D-BRANN"
+  description: "Distributed pose estimation from sparse IMUs"
+  site-url: "https://wearnet.github.io/D-BRANN/"
+  repo-url: "https://github.com/WearNET/D-BRANN"
+  repo-actions: [issue]
+  page-navigation: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Overview
+    right:
+      - icon: github
+        href: https://github.com/WearNET/D-BRANN
+        text: GitHub
+  sidebar:
+    style: docked
+    collapse-level: 1
+    contents:
+      - section: "Overview"
+        contents:
+          - index.qmd
+          - structure.qmd
+      - section: "Setup"
+        contents:
+          - environment.qmd
+          - checkpoints.qmd
+          - data.qmd
+      - section: "Usage"
+        contents:
+          - training.qmd
+          - evaluation.qmd
+      - section: "Xsens integration"
+        contents:
+          - xsens-calibration.qmd
+          - xsens-live-inference.qmd
+          - xsens-unity.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+    number-sections: false
+    smooth-scroll: true

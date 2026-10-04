@@ -1,0 +1,121 @@
+---
+title: "Checkpoints"
+---
+
+This directory contains the validated model weights used by the current D-BRANN pipeline.
+
+Unlike the datasets, the final checkpoints are tracked in the repository so the trained architecture can be evaluated without retraining every stage.
+
+## Directory structure
+
+```text
+checkpoints/
+├── README.md
+├── transpose_original/
+│   └── weights.pt
+├── dbran_pose_s1/
+├── dbran_pose_s2/
+├── dbran_pose_s3/
+├── dbran_fusion/
+└── retrained/                      # New training runs (gitignored, see below)
+```
+
+## Original TransPose checkpoint
+
+```text
+checkpoints/transpose_original/weights.pt
+```
+
+This checkpoint contains the original TransPose model parameters.
+
+In the current D-BRANN pipeline:
+
+- the original TransPose model is retained as the centralized baseline;
+- the original `Trans-B1` and `Trans-B2` modules are retained for translation estimation;
+- the original centralized pose stages are replaced by the distributed D-BRANN pose architecture.
+
+## D-BRANN Pose-S1
+
+```text
+checkpoints/dbran_pose_s1/
+```
+
+Pose-S1 estimates five leaf-joint positions using independent branches based on the shared root IMU and one local IMU.
+
+Branches:
+
+```text
+left_leg
+right_leg
+head
+left_arm
+right_arm
+```
+
+The final Pose-S1 configuration uses a recurrent hidden size of 32 and does not use the discarded sector classifier.
+
+## D-BRANN Pose-S2
+
+```text
+checkpoints/dbran_pose_s2/
+```
+
+Pose-S2 estimates full-joint positions through five anatomical branches:
+
+```text
+left_leg
+right_leg
+trunk_head
+left_arm
+right_arm
+```
+
+The final Pose-S2 configuration uses a recurrent hidden size of 16.
+
+## D-BRANN Pose-S3
+
+```text
+checkpoints/dbran_pose_s3/
+```
+
+Pose-S3 estimates reduced-joint 6D rotations through five anatomical branches. The final Pose-S3 configuration uses a recurrent hidden size of 16.
+
+## Learned rotation fusion
+
+```text
+checkpoints/dbran_fusion/
+└── best_fusion.pth
+```
+
+The fusion network refines the assembled Pose-S3 output using a learned residual correction.
+
+Current configuration:
+
+```text
+input_dim: 90
+output_dim: 90
+hidden_size: 16
+use_pose_s2_position: False
+```
+
+## Centralized checkpoint paths
+
+All checkpoint locations are defined in `main_path.py`:
+
+```python
+TRANSPOSE_WEIGHTS_FILE
+POSE_S1_CHECKPOINTS_DIR
+POSE_S2_CHECKPOINTS_DIR
+POSE_S3_CHECKPOINTS_DIR
+FUSION_CHECKPOINT
+```
+
+Scripts should use these constants instead of hard-coded absolute paths.
+
+## Retraining
+
+New training runs should be saved under `checkpoints/retrained/`. This directory is excluded from Git so experimental runs do not overwrite or become confused with the validated checkpoint set.
+
+Pose-S1 and Pose-S2 training default `--save_dir` to `checkpoints/retrained/`, so a default run never touches the validated checkpoints above. Pose-S3 and fusion training require an explicit `--save_dir`; pointing it at `checkpoints/dbran_pose_s3/` or `checkpoints/dbran_fusion/` overwrites the validated checkpoint, so always redirect it to a new or `checkpoints/retrained/`-style directory when reproducing the study.
+
+See [Evaluation and profiling](evaluation.qmd#smoke-test) for the smoke test that loads this whole checkpoint set and confirms it works end to end.

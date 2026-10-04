@@ -1,0 +1,12 @@
+---
+title: "Environment"
+---
+
+The current implementation has been validated inside the `D-BRAN` Conda environment. Create it from the included `environment.yml`:
+
+```bash
+conda env create -f environment.yml
+conda activate D-BRAN
+```
+
+This installs PyTorch with CUDA 13.0 support (via `--extra-index-url https://download.pytorch.org/whl/cu130`) and the scientific Python packages imported by the training, evaluation, profiling, and visualization scripts. Adjust the PyTorch/CUDA build in `environment.yml` if your machine uses a different CUDA version.

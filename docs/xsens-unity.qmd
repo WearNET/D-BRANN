@@ -1,0 +1,133 @@
+---
+title: "Xsens to Unity integration"
+subtitle: "Phase 5"
+---
+
+> **Status note (verified against the actual code):** this repository
+> currently contains two independent, non-interoperable halves of Unity
+> integration work, not the single working pipeline this page originally
+> implied:
+>
+> - `scripts/xsens/run_dbran_unity.py` is the sender that actually runs
+>   today. It streams over **TCP port 8888** using the original TransPose
+>   Unity text protocol (`build_transpose_message`: comma-separated
+>   axis-angle and translation values as ASCII text), **not** the UDP/DBRN
+>   binary protocol documented below. It expects a Unity-side receiver
+>   compatible with that original TransPose text protocol, which is not
+>   included in this repository.
+> - `unity/DbranUdpAvatarReceiver.cs` and the "UDP packet v1" protocol
+>   documented below are a complete, working *receiver* for a
+>   D-BRANN-native binary protocol, but no Python sender implementing it
+>   exists anywhere in this repository -- `run_dbran_unity.py` does not
+>   produce these packets, and nothing else does either.
+>
+> Do not expect `run_dbran_unity.py` and `DbranUdpAvatarReceiver.cs` to
+> talk to each other out of the box; they belong to two different,
+> unfinished integration attempts. Whoever picks this up next should
+> either write a UDP/DBRN sender to match the receiver, or update the
+> receiver to speak the TCP text protocol `run_dbran_unity.py` already
+> sends.
+
+This phase visualizes calibrated D-BRANN output on a Unity Humanoid avatar.
+
+```{mermaid}
+flowchart TD
+    A["Six Xsens MTw sensors"] --> B["Native synchronized bridge"]
+    B --> C["Xsens calibration"]
+    C --> D["D-BRANN online inference"]
+    D --> E["SMPL global rotations + root translation"]
+    E -->|"UDP 127.0.0.1:9764"| F["Unity Humanoid avatar"]
+```
+
+## Files
+
+```text
+scripts/xsens/run_dbran_unity.py
+unity/DbranUdpAvatarReceiver.cs
+docs/xsens-unity.qmd
+```
+
+## Unity setup
+
+1. Open or create a Unity 3D project.
+2. Import an avatar with a Humanoid-compatible skeleton.
+3. Configure the model Rig as `Humanoid`.
+4. Place the avatar in a neutral T-pose.
+5. Copy `DbranUdpAvatarReceiver.cs` into `Assets/Scripts/`.
+6. Attach it to the avatar root GameObject containing the `Animator`.
+7. Leave the UDP port at `9764`.
+8. Start with zero smoothing, translation scale `1`, and Euler offset `(0,0,0)`.
+
+The component captures the avatar's initial bone rotations when Play mode starts, so the avatar must already be in its neutral pose. It can disable the Animator after resolving the Humanoid bones so an Animator Controller does not overwrite D-BRANN.
+
+## Start order
+
+### Terminal 1 — Xsens bridge
+
+```powershell
+cd C:\Users\kevin\D-BRANN\native\xsens_bridge
+.\run.ps1 xsens_stream_bridge
+```
+
+Wait for `6/6` and start measurement.
+
+### Unity
+
+Press Play in **the original TransPose Unity Example scene** (external project, not included in this repository — see the status note above). It waits for a TCP connection on port 8888; `run_dbran_unity.py` connects to it before calibration starts.
+
+### Terminal 2 — Python sender
+
+```powershell
+conda activate D-BRAN
+cd C:\Users\kevin\D-BRANN
+
+python .\scripts\xsens\run_dbran_unity.py `
+  --device cuda `
+  --countdown 8 `
+  --print_every 120 `
+  --warmup_frames 30
+```
+
+By default (`--pipeline parallel`) the five pose branches each run in their own OS process. Use `--pipeline sequential` for the original single-process pipeline instead, optionally with `--cuda_streams`.
+
+There is no `--calibration` or `--max_frames` flag: each run performs its own in-memory session calibration (global reference, then T-pose), and streaming continues until Ctrl+C. Hold the T-pose until Python reports that the 26-frame window is ready. Then perform slow isolated movements:
+
+1. left arm down and back
+2. right arm down and back
+3. left knee flexion
+4. right knee flexion
+5. head turn
+6. torso turn
+7. return to T-pose
+
+## First-run checks
+
+Inspect:
+
+- whether left and right are correct
+- whether the avatar faces the correct direction
+- whether arms, legs, head, and torso follow the intended segment
+- visible smoothness and delay
+- root translation stability
+- Unity Inspector counters for packets, malformed packets, and skipped sequences
+
+If the avatar faces backward, stop Play mode, set `Model To Scene Euler Offset` to `(0,180,0)`, and restart Play mode.
+
+Do not alter the left/right mapping immediately if motion looks mirrored. Record which exact movements are reversed first; Python already converts SMPL `x = left` into Unity `x = right` using a basis transformation.
+
+## UDP packet v1
+
+Little-endian, fixed size: `908` bytes.
+
+```text
+magic                  4 bytes   "DBRN"
+version                uint16    1
+joint count             uint16    24
+Xsens sequence         uint32
+D-BRANN input frame     int32
+D-BRANN output frame    int32
+source host time       uint64
+flags                  uint32
+root translation       3 × float32
+global rotations       24 × 3 × 3 × float32, row-major
+```

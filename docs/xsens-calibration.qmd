@@ -1,0 +1,131 @@
+---
+title: "Xsens calibration"
+subtitle: "Phase 3 — Static calibration"
+---
+
+This package adds the Xsens-to-D-BRANN calibration layer to the existing repository. It does not create a separate Visual Studio Code project and it does not replace the native Xsens bridge.
+
+## Installed files
+
+```text
+dbran/xsens/calibration.py
+dbran/xsens/__init__.py
+scripts/xsens/calibrate_xsens.py
+scripts/xsens/test_xsens_calibration.py
+configs/xsens_calibration.example.json
+```
+
+The generated calibration is written to `configs/xsens_calibration.json`.
+
+That generated file is specific to the sensor assignment and physical sensor placement. The example JSON can be tracked in Git; the generated calibration should normally remain local and be recreated when sensor placement changes.
+
+## Calibration model
+
+The raw bridge provides:
+
+```text
+acc_local: [6, 3]
+ori_sensor_to_xsens_global: [6, 3, 3]
+```
+
+The calibrated output is:
+
+```text
+acc_dbran: [6, 3]
+ori_bone_to_dbran_global: [6, 3, 3]
+```
+
+The runtime conversion is:
+
+```text
+acc_xsens_global = ori_raw @ acc_local
+acc_dbran_global = global_to_dbran @ acc_xsens_global
+acc_calibrated = acc_dbran_global - acceleration_offsets
+
+ori_calibrated = global_to_dbran @ ori_raw @ device_to_bone
+```
+
+## Terminal setup
+
+Run the native bridge in one PowerShell terminal:
+
+```powershell
+cd C:\Users\kevin\D-BRANN\native\xsens_bridge
+.\run.ps1 xsens_stream_bridge
+```
+
+Wait for all six sensors and start measurement mode.
+
+In a second PowerShell terminal:
+
+```powershell
+conda activate D-BRAN
+cd C:\Users\kevin\D-BRANN
+```
+
+## Create the calibration
+
+```powershell
+python .\scripts\xsens\calibrate_xsens.py `
+  --reference_role root `
+  --reference_seconds 5 `
+  --tpose_seconds 5 `
+  --countdown 5 `
+  --save_capture .\data\logs\xsens_calibration_capture.pt
+```
+
+### Step 1: global reference
+
+Use the MTw assigned to `root`. Align its sensor-fixed axes with the D-BRANN body frame:
+
+```text
++X = subject's left
++Y = up
++Z = forward
+```
+
+Use the sensor coordinate markings or the MT Manager coordinate display. Do not infer the axes only from the logo or charging position.
+
+### Step 2: T-pose
+
+Wear all six sensors in the fixed order and secure them firmly:
+
+```text
+left_arm, right_arm, left_leg, right_leg, head, root
+```
+
+Hold a neutral T-pose during the capture.
+
+## Validate immediately
+
+Keep the same T-pose and run:
+
+```powershell
+python .\scripts\xsens\test_xsens_calibration.py `
+  --calibration .\configs\xsens_calibration.json `
+  --max_frames 300 `
+  --print_every 60 `
+  --save_pt .\data\logs\xsens_calibration_test.pt
+```
+
+In the same T-pose, each calibrated orientation should remain reasonably close to identity and each calibrated acceleration mean should remain close to zero. The test also verifies that `normalize_and_concat()` produces finite 72-dimensional D-BRANN inputs.
+
+## Git
+
+Track the implementation:
+
+```text
+dbran/xsens/calibration.py
+scripts/xsens/calibrate_xsens.py
+scripts/xsens/test_xsens_calibration.py
+configs/xsens_calibration.example.json
+```
+
+Keep generated files local:
+
+```gitignore
+configs/xsens_calibration.json
+native/xsens_bridge/build/
+native/xsens_bridge/data/logs/
+data/logs/
+```

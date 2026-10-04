@@ -1,0 +1,39 @@
+---
+title: "Training and data preparation"
+---
+
+The staged workflow is preserved under `scripts/`.
+
+## Pose-S1
+
+```text
+scripts/data/prepare_pose_s1_gt.py
+scripts/train/train_pose_s1.py
+scripts/precompute/precompute_pose_s1.py
+```
+
+## Pose-S2
+
+```text
+scripts/data/prepare_pose_s2_gt.py
+scripts/data/prepare_pose_s2.py
+scripts/train/train_pose_s2.py
+scripts/precompute/precompute_pose_s2.py
+```
+
+## Pose-S3 and fusion
+
+```text
+scripts/data/prepare_pose_s3.py
+scripts/train/train_pose_s3.py
+scripts/precompute/precompute_pose_s3.py
+scripts/train/train_fusion.py
+```
+
+Run any script with `--help` to inspect its current arguments:
+
+```bash
+python scripts/train/train_pose_s2.py --help
+```
+
+Every script under `scripts/` has a block of default CLI arguments at the top of its `main()`/`argparse` setup. Running a script without overriding those defaults reproduces the original D-BRANN study exactly (same hyperparameters, same data splits). See [Checkpoints](checkpoints.qmd#retraining) for which output paths are safe to leave unmodified and which must be redirected to avoid overwriting a validated checkpoint.
