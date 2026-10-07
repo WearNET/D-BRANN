@@ -4,6 +4,8 @@ title: "Training and data preparation"
 
 The staged workflow is preserved under `scripts/`.
 
+![Stage-wise training. Each stage is trained independently on ground-truth inputs (with Gaussian noise added to the Stage 2 and Stage 3 inputs); the residual fusion is trained last on the assembled Stage 3 outputs, and evaluation runs the stages sequentially.](figures/stagewise-training.png){fig-alt="Training diagram: the training data (AMASS, DIP-IMU) provides IMU signals and ground-truth labels for every stage. Stage 1 trains on IMU inputs to predict leaf positions; Stage 2 trains on IMUs plus ground-truth leaf positions with added Gaussian noise (sigma 0.04 m) to predict joint positions; Stage 3 trains on IMUs plus ground-truth joint positions with Gaussian noise (sigma 0.025 m) to predict 6D rotations; after Stage 3 is trained, the residual fusion trains on the assembled Stage 3 outputs to produce corrected 6D rotations. Evaluation runs IMUs, Stage 1, Stage 2, Stage 3, Fusion, then the SMPL pose sequentially."}
+
 ## Pose-S1
 
 ```text

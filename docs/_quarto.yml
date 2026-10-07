@@ -49,3 +49,4 @@ format:
     code-overflow: wrap
     number-sections: false
     smooth-scroll: true
+    lightbox: true

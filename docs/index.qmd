@@ -7,6 +7,8 @@ subtitle: "Distributed pose estimation from sparse IMUs"
 
 D-BRANN builds on the excellent work of [TransPose](https://github.com/Xinyu-Yi/TransPose) (Yi et al.), whose centralized architecture and translation modules (Trans-B1, Trans-B2) form the foundation this project extends into a distributed, branch-based design.
 
+![Centralized joint-angle estimation (A) versus the proposed distributed D-BRANN (B).](figures/centralized-vs-distributed.png){fig-alt="Side-by-side comparison: in (A) all wearable sensor streams feed one centralized network that outputs SMPL joint rotations; in (B) each sensor feeds its own three-stage local inference branch, the shared root IMU is shared across branches, and a residual fusion module produces the SMPL joint rotations."}
+
 D-BRANN estimates full-body pose using six IMUs placed on:
 
 - left forearm
@@ -18,20 +20,7 @@ D-BRANN estimates full-body pose using six IMUs placed on:
 
 The architecture preserves the staged pose-estimation strategy while distributing the computation across anatomical branches.
 
-```{mermaid}
-flowchart TD
-    IMU["Six sparse IMUs"] --> ROOT["Shared root reference"]
-    ROOT --> LL["Left-leg branch"]
-    ROOT --> RL["Right-leg branch"]
-    ROOT --> TH["Trunk-head branch"]
-    ROOT --> LA["Left-arm branch"]
-    ROOT --> RA["Right-arm branch"]
-    LL & RL & TH & LA & RA --> S1["Pose-S1<br/>distributed leaf-joint position estimation"]
-    S1 --> S2["Pose-S2<br/>distributed full-joint position estimation"]
-    S2 --> S3["Pose-S3<br/>distributed reduced-joint rotation estimation"]
-    S3 --> FUSION["Learned residual rotation fusion"]
-    FUSION --> POSE["Full SMPL pose"]
-```
+![D-BRANN architecture. Six IMUs feed five anatomical branches that share the hip/root IMU across Stage 1 (leaf-joint positions), Stage 2 (all-joint positions) and Stage 3 (joint rotations); a learned residual fusion produces the full SMPL pose, while the translation modules remain unchanged.](figures/architecture.png){fig-alt="Architecture diagram: the six IMUs (left arm, right arm, left leg, right leg, trunk/head, and the shared hip/root IMU) feed five parallel branches. Each branch runs Stage 1 (leaf joints), Stage 2 (all-joint positions) and Stage 3 (joint rotations). The Stage 3 outputs go to a learned residual fusion module that outputs the full SMPL pose with 24 joints. The translation modules are unchanged."}
 
 The original TransPose `Trans-B1` and `Trans-B2` modules are retained for translation estimation.
 
@@ -47,6 +36,8 @@ The original TransPose `Trans-B1` and `Trans-B2` modules are retained for transl
 
 Pose-S1 uses one local IMU and the shared root IMU for each branch. Pose-S2 and Pose-S3 continue the distributed processing with branch-specific joint subsets. The fusion network refines the assembled Pose-S3 output before conversion to the full SMPL pose.
 
+![Stage module. Each stage of a branch maps a 26-frame input window through Linear (d_in → h), a 2-layer BLSTM of width h, and Linear (2h → d_out) to produce the branch output.](figures/stage-module.png){fig-alt="Diagram of the three stages (leaf joints, all-joint positions, joint rotations) and, expanded below, the internal structure shared by every stage module: a 26-frame window of dimension d_in, a linear layer d_in to h, a 2-layer bidirectional LSTM of width h, a linear layer 2h to d_out, and the branch output."}
+
 ### Parameter count
 
 The current full-pipeline profiler reports:
@@ -57,6 +48,8 @@ The current full-pipeline profiler reports:
 | D-BRANN pose pipeline + original Trans-B1/B2 | 1,603,357 | 6.116 MB |
 
 The resulting parameter ratio is **0.3341**, corresponding to approximately **66.6% fewer parameters** than the original full pipeline.
+
+![System-level cost of D-BRANN relative to the centralized TransPose (percentage change; negative is lower).](figures/system-level-cost.png){fig-alt="Horizontal bar chart of the percentage change of D-BRANN relative to centralized TransPose: online latency +96.3%, online CUDA memory -10.3%, offline CUDA memory -31.1%, offline time per frame -31.3%, FP32 model size -66.6%, pose parameters -90.3%, full parameters -66.6%."}
 
 ## Where to go next
 

@@ -57,6 +57,8 @@ The base preprocessing script is `scripts/data/preprocess_base_datasets.py`. Pro
 
 A custom capture set recorded in-house, using an OptiTrack volume as ground truth alongside six Xsens MTw sensors as the sparse-IMU input.
 
+![Experimental setup. (a) IMU placement on the OptiTrack-instrumented subject (front and back views). (b) Comparison of the OptiTrack ground truth (blue) and the D-BRANN estimate (green) in Unity, with the capture room shown in the inset.](figures/experimental-setup.png){fig-alt="(a) Front and back views of a subject in an OptiTrack marker suit with six IMU sensors circled: both wrists, the head, the hip, and both lower legs. (b) A Unity scene showing two avatars in a T-pose, the OptiTrack ground truth in blue and the D-BRANN estimate in green, with an inset photo of the subject in the capture room."}
+
 ```text
 dataset_raw/dbran_optitrack/
 ├── captura_XXX.pt                  # Calibrated Xsens capture (xsensDataCapture.py)
