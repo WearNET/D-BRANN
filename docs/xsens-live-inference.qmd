@@ -66,11 +66,9 @@ The script checks:
 
 ## Temporal behavior
 
-The online model uses:
+The online model uses 20 past frames + the current frame + 5 future frames = 26 frames per branch:
 
-```text
-20 past frames + current frame + 5 future frames = 26 frames
-```
+![Online input structure for each branch: a 26-frame window (20 past, 1 current and 5 future frames) with 24 values per frame (local IMU plus shared hip/root IMU), advanced with a stride of one frame.](figures/online-input-window.png){fig-alt="A row of 26 numbered frames: frames 1 to 20 are past frames, frame 21 is the current frame, and frames 22 to 26 are future frames. Each frame holds 12 values per IMU (3 acceleration values and a 9-value orientation matrix) from the local IMU and the shared hip/root IMU, 24 values in total. The stride is one frame, giving one new prediction per newly available frame."}
 
 At 60 Hz, the five future frames introduce an algorithmic delay of about 83.3 ms. The script separately reports processing time and host-frame age. This applies identically to both pipeline variants — the window logic lives outside the branch computation itself.
 
