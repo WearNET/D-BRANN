@@ -78,19 +78,7 @@ The first outputs are generated from a partially initialized window. The script 
 
 `dbran/pipeline_parallel.py` provides `DBranParallelPipeline`: each of the five anatomical pose branches (left leg, right leg, trunk/head, left arm, right arm) runs in its own OS process instead of inside one process. Translation (Trans-B1/Trans-B2) and residual fusion run in a central orchestrator process.
 
-```{mermaid}
-flowchart TD
-    A["Orchestrator process<br/>translation + fusion"] -->|"acc/ori window"| B1["Branch process: left_leg"]
-    A -->|"acc/ori window"| B2["Branch process: right_leg"]
-    A -->|"acc/ori window"| B3["Branch process: trunk_head"]
-    A -->|"acc/ori window"| B4["Branch process: left_arm"]
-    A -->|"acc/ori window"| B5["Branch process: right_arm"]
-    B1 -->|"leaf + S2 + S3 output"| A
-    B2 -->|"leaf + S2 + S3 output"| A
-    B3 -->|"leaf + S2 + S3 output"| A
-    B4 -->|"leaf + S2 + S3 output"| A
-    B5 -->|"leaf + S2 + S3 output"| A
-```
+![Process-parallel pipeline. The orchestrator sends each branch process its acc/ori window; each branch runs its own Stage 1, 2 and 3 chain and returns the leaf, Stage 2 and Stage 3 outputs, which the orchestrator assembles before residual fusion and translation.](figures/process-parallel-branches.png){fig-alt="Diagram of the process-parallel pipeline: a calibrated Xsens frame enters an orchestrator process containing branch-output assembly, residual fusion and the Trans-B1/Trans-B2 translation modules, and the full SMPL pose plus root translation leaves it. Below, five branch processes (left arm, right arm, left leg, right leg, trunk/head) each run a Stage 1, Stage 2, Stage 3 chain. Dashed arrows send the acc/ori window from the orchestrator to each branch; solid purple arrows return the leaf, Stage 2 and Stage 3 outputs. Data travels as CPU tensors over torch.multiprocessing.Queue."}
 
 Each branch process loads only its own three checkpoints (Stage 1, Stage 2, Stage 3) and runs that chain end to end; it never waits on the other four branches. The orchestrator blocks on all five output queues, assembles `leaf_positions`/`full_positions`/the combined Stage-3 output exactly as `DBranPipeline` does internally, then runs fusion and translation unchanged. Data between processes travels as plain CPU tensors over `torch.multiprocessing.Queue` (not CUDA IPC), since consumer-GPU/WDDM Windows does not reliably support CUDA tensor sharing across processes.
 

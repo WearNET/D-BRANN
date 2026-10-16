@@ -49,7 +49,7 @@ The current full-pipeline profiler reports:
 
 The resulting parameter ratio is **0.3341**, corresponding to approximately **66.6% fewer parameters** than the original full pipeline.
 
-![System-level cost of D-BRANN relative to the centralized TransPose (percentage change; negative is lower).](figures/system-level-cost.png){fig-alt="Horizontal bar chart of the percentage change of D-BRANN relative to centralized TransPose: online latency +96.3%, online CUDA memory -10.3%, offline CUDA memory -31.1%, offline time per frame -31.3%, FP32 model size -66.6%, pose parameters -90.3%, full parameters -66.6%."}
+![System-level cost of D-BRANN relative to the centralized TransPose benchmark (percentage change; negative is lower).](figures/system-level-cost.png){fig-alt="Horizontal bar chart of the percentage change of D-BRANN relative to the benchmark: online latency (total) +2.8%, online CUDA memory -10.3%, offline CUDA memory -31.1%, offline time per frame -31.3%, FP32 model size -66.59%, full pipeline parameters -66.59%."}
 
 ## Where to go next
 
