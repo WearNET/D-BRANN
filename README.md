@@ -26,7 +26,11 @@ This research received financial support from the NSF CAREER Intelligent Biomark
 
 ## License
 
+Copyright © 2026 K. Niño-Tejada, J. L. Rivas-Caicedo, L. Saldaña-Aristizábal, and J. F. Patarroyo-Montenegro.
+
 The source code is released under the [GNU General Public License v3.0](LICENSE), as it builds on [TransPose](https://github.com/Xinyu-Yi/TransPose), which is distributed under the same license.
+
+Portions of this code (`articulate/`, `net.py`, `utils.py`, and adapted parts of `config.py`, `scripts/baseline/evaluate_transpose.py`, and `scripts/data/preprocess_base_datasets.py`) are derived from [TransPose](https://github.com/Xinyu-Yi/TransPose) by Yi et al., also distributed under GPL-3.0.
 
 Third-party assets are **not** covered by this license and are subject to their own terms: the SMPL model, the AMASS, DIP-IMU and TotalCapture datasets, and the original TransPose checkpoint. They are not redistributed here and must be obtained from their official sources. The MoCap and IMU dataset is released on Zenodo under CC BY 4.0.
 
