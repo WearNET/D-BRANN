@@ -50,3 +50,4 @@ format:
     number-sections: false
     smooth-scroll: true
     lightbox: true
+    link-external-newwindow: true
