@@ -1,6 +1,6 @@
 ---
 title: "D-BRANN"
-subtitle: "Distributed pose estimation from sparse IMUs"
+subtitle: "Distributed Pose Estimation from Sparse IMUs"
 ---
 
 **D-BRANN** is a distributed bidirectional recurrent architecture for full-body human pose estimation from six sparse inertial measurement units (IMUs).
@@ -28,7 +28,7 @@ The architecture preserves the staged pose-estimation strategy while distributin
 
 The original TransPose `Trans-B1` and `Trans-B2` modules are retained for translation estimation.
 
-## Final architecture
+## Final Architecture
 
 | Stage | Organization | Hidden size | Output |
 |---|---:|---:|---|
@@ -42,28 +42,28 @@ Pose-S1 uses one local IMU and the shared root IMU for each branch. Pose-S2 and 
 
 ![Stage module. Each stage of a branch maps a 26-frame input window through Linear (d_in → h), a 2-layer BLSTM of width h, and Linear (2h → d_out) to produce the branch output.](figures/stage-module.png){fig-alt="Diagram of the three stages (leaf joints, all-joint positions, joint rotations) and, expanded below, the internal structure shared by every stage module: a 26-frame window of dimension d_in, a linear layer d_in to h, a 2-layer bidirectional LSTM of width h, a linear layer 2h to d_out, and the branch output."}
 
-### Parameter count
+### Parameter Count
 
 The current full-pipeline profiler reports:
 
 | Pipeline | Parameters | FP32 parameter size |
 |---|---:|---:|
-| Original TransPose full pipeline | 4,798,771 | 18.306 MB |
-| D-BRANN pose pipeline + original Trans-B1/B2 | 1,603,357 | 6.116 MB |
+| TransPose (Benchmark) | 4,798,771 | 18.306 MB |
+| D-BRANN | 1,603,357 | 6.116 MB |
 
 The resulting parameter ratio is **0.3341**, corresponding to approximately **66.6% fewer parameters** than the original full pipeline.
 
 ![System-level cost of D-BRANN relative to the centralized TransPose benchmark (percentage change; negative is lower).](figures/system-level-cost.png){fig-alt="Horizontal bar chart of the percentage change of D-BRANN relative to the benchmark: online latency (total) +2.8%, online CUDA memory -10.3%, offline CUDA memory -31.1%, offline time per frame -31.3%, FP32 model size -66.59%, full pipeline parameters -66.59%."}
 
-## Where to go next
+## Where to Go Next
 
-- [Repository structure](structure.qmd) — how the codebase is organized
+- [Repository Structure](structure.qmd) — how the codebase is organized
 - [Environment](environment.qmd) — set up the Conda environment
 - [Checkpoints](checkpoints.qmd) — the validated model weights
 - [Data](data.qmd) — datasets, SMPL assets, and staged training tensors
-- [Training and data preparation](training.qmd) — the staged training workflow
-- [Evaluation and profiling](evaluation.qmd) — running the smoke test and full evaluation
-- [Xsens integration](xsens-calibration.qmd) — calibration, live inference, and Unity streaming
+- [Training and Data Preparation](training.qmd) — the staged training workflow
+- [Evaluation and Profiling](evaluation.qmd) — running the smoke test and full evaluation
+- [Xsens Integration](xsens-calibration.qmd) — calibration, live inference, and Unity streaming
 
 ## License
 

@@ -1,5 +1,5 @@
 ---
-title: "Xsens to Unity integration"
+title: "Xsens to Unity Integration"
 subtitle: "Phase 5"
 ---
 
@@ -47,7 +47,7 @@ unity/DbranUdpAvatarReceiver.cs
 docs/xsens-unity.qmd
 ```
 
-## Unity setup
+## Unity Setup
 
 1. Open or create a Unity 3D project.
 2. Import an avatar with a Humanoid-compatible skeleton.
@@ -60,9 +60,9 @@ docs/xsens-unity.qmd
 
 The component captures the avatar's initial bone rotations when Play mode starts, so the avatar must already be in its neutral pose. It can disable the Animator after resolving the Humanoid bones so an Animator Controller does not overwrite D-BRANN.
 
-## Start order
+## Start Order
 
-### Terminal 1 — Xsens bridge
+### Terminal 1 — Xsens Bridge
 
 ```powershell
 cd C:\Users\kevin\D-BRANN\native\xsens_bridge
@@ -75,7 +75,7 @@ Wait for `6/6` and start measurement.
 
 Press Play in **the original TransPose Unity Example scene** (external project, not included in this repository — see the status note above). It waits for a TCP connection on port 8888; `run_dbran_unity.py` connects to it before calibration starts.
 
-### Terminal 2 — Python sender
+### Terminal 2 — Python Sender
 
 ```powershell
 conda activate D-BRAN
@@ -100,7 +100,7 @@ There is no `--calibration` or `--max_frames` flag: each run performs its own in
 6. torso turn
 7. return to T-pose
 
-## First-run checks
+## First-Run Checks
 
 Inspect:
 
@@ -115,7 +115,7 @@ If the avatar faces backward, stop Play mode, set `Model To Scene Euler Offset` 
 
 Do not alter the left/right mapping immediately if motion looks mirrored. Record which exact movements are reversed first; Python already converts SMPL `x = left` into Unity `x = right` using a basis transformation.
 
-## UDP packet v1
+## UDP Packet v1
 
 Little-endian, fixed size: `908` bytes.
 

@@ -1,11 +1,11 @@
 ---
-title: "Xsens calibration"
-subtitle: "Phase 3 — Static calibration"
+title: "Xsens Calibration"
+subtitle: "Phase 3 — Static Calibration"
 ---
 
 This package adds the Xsens-to-D-BRANN calibration layer to the existing repository. It does not create a separate Visual Studio Code project and it does not replace the native Xsens bridge.
 
-## Installed files
+## Installed Files
 
 ```text
 dbran/xsens/calibration.py
@@ -19,7 +19,7 @@ The generated calibration is written to `configs/xsens_calibration.json`.
 
 That generated file is specific to the sensor assignment and physical sensor placement. The example JSON can be tracked in Git; the generated calibration should normally remain local and be recreated when sensor placement changes.
 
-## Calibration model
+## Calibration Model
 
 The raw bridge provides:
 
@@ -45,7 +45,7 @@ acc_calibrated = acc_dbran_global - acceleration_offsets
 ori_calibrated = global_to_dbran @ ori_raw @ device_to_bone
 ```
 
-## Terminal setup
+## Terminal Setup
 
 Run the native bridge in one PowerShell terminal:
 
@@ -63,7 +63,7 @@ conda activate D-BRAN
 cd C:\Users\kevin\D-BRANN
 ```
 
-## Create the calibration
+## Create the Calibration
 
 ```powershell
 python .\scripts\xsens\calibrate_xsens.py `
@@ -74,7 +74,7 @@ python .\scripts\xsens\calibrate_xsens.py `
   --save_capture .\data\logs\xsens_calibration_capture.pt
 ```
 
-### Step 1: global reference
+### Step 1: Global Reference
 
 Use the MTw assigned to `root`. Align its sensor-fixed axes with the D-BRANN body frame:
 
@@ -86,7 +86,7 @@ Use the MTw assigned to `root`. Align its sensor-fixed axes with the D-BRANN bod
 
 Use the sensor coordinate markings or the MT Manager coordinate display. Do not infer the axes only from the logo or charging position.
 
-### Step 2: T-pose
+### Step 2: T-Pose
 
 Wear all six sensors in the fixed order and secure them firmly:
 
@@ -96,7 +96,7 @@ left_arm, right_arm, left_leg, right_leg, head, root
 
 Hold a neutral T-pose during the capture.
 
-## Validate immediately
+## Validate Immediately
 
 Keep the same T-pose and run:
 

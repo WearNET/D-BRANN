@@ -1,5 +1,5 @@
 ---
-title: "Xsens live inference"
+title: "Xsens Live Inference"
 ---
 
 This stage connects the validated Xsens calibration directly to the D-BRANN online pipeline. By default the five anatomical pose branches each run in their own OS process (`DBranParallelPipeline`); the original single-process pipeline (`DBranPipeline`) remains available as a variant.
@@ -22,7 +22,7 @@ Unity is intentionally not part of this test. The objective is to validate strea
 - `dbran/pipeline_parallel.py` must be validated against `dbran/pipeline.py` (identical pose output, translation within floating-point noise) — see below.
 - PyTorch must detect the intended CUDA device.
 
-## First live test
+## First Live Test
 
 Start the native bridge in one PowerShell terminal:
 
@@ -64,7 +64,7 @@ The script checks:
 - local-pose rotation validity
 - accumulated root translation
 
-## Temporal behavior
+## Temporal Behavior
 
 The online model uses 20 past frames + the current frame + 5 future frames = 26 frames per branch:
 
@@ -74,7 +74,7 @@ At 60 Hz, the five future frames introduce an algorithmic delay of about 83.3 ms
 
 The first outputs are generated from a partially initialized window. The script reports a valid full-window output only after all 26 positions have been filled.
 
-## Process-parallel branches (default)
+## Process-Parallel Branches (Default)
 
 `dbran/pipeline_parallel.py` provides `DBranParallelPipeline`: each of the five anatomical pose branches (left leg, right leg, trunk/head, left arm, right arm) runs in its own OS process instead of inside one process. Translation (Trans-B1/Trans-B2) and residual fusion run in a central orchestrator process.
 
@@ -96,7 +96,7 @@ pipeline.shutdown()                                       # stop the 5 branch pr
 
 **Known tradeoff.** Measured on this machine: 15.72 ms/frame sequential vs. 15.51 ms/frame with 5 processes (~1.3% faster). Each branch costs only ~0.5-0.6 MFLOPs per step, so the cost of moving tensors between OS processes (serialization, CPU↔GPU copies, five round trips per frame) roughly cancels out the benefit of computing the five branches at the same time. The architecture is genuinely process-parallel and numerically validated; it is not yet a large latency win on this hardware.
 
-## Sequential variant
+## Sequential Variant
 
 The original single-process pipeline (`dbran/pipeline.py`, `DBranPipeline`) is still available:
 
@@ -119,7 +119,7 @@ python .\scripts\xsens\run_dbran_live.py `
 
 `--cuda_streams` only has an effect with `--pipeline sequential`; the process-parallel pipeline does not use CUDA streams. Treat either sequential mode as a baseline to compare the process-parallel pipeline against.
 
-## Saving results
+## Saving Results
 
 When `--save_pt` is provided, the output contains:
 

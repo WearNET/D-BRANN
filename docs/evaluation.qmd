@@ -1,8 +1,8 @@
 ---
-title: "Evaluation and profiling"
+title: "Evaluation and Profiling"
 ---
 
-## Smoke test
+## Smoke Test
 
 The following command loads every checkpoint and evaluates a single sequence (`--max_sequences 1`), purely to confirm the code path runs end to end — it is not a representative evaluation:
 
@@ -26,7 +26,7 @@ This verifies:
 
 Each training script's argparse defaults reproduce the original D-BRANN study exactly (same hyperparameters, same data splits), so running a script without overriding its defaults is the correct way to redo a stage identically — see [Checkpoints → Retraining](checkpoints.qmd#retraining) for which output paths need to be redirected to avoid overwriting a validated checkpoint.
 
-## Full offline evaluation
+## Full Offline Evaluation
 
 ```bash
 python scripts/profile/profile_full_pipeline.py \
@@ -34,7 +34,7 @@ python scripts/profile/profile_full_pipeline.py \
   --profile_repeat 1
 ```
 
-## Online protocol
+## Online Protocol
 
 ```bash
 python scripts/profile/profile_full_pipeline.py \

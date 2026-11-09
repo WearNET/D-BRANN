@@ -1,5 +1,5 @@
 ---
-title: "Training and data preparation"
+title: "Training and Data Preparation"
 ---
 
 The staged workflow is preserved under `scripts/`.
@@ -23,7 +23,7 @@ scripts/train/train_pose_s2.py
 scripts/precompute/precompute_pose_s2.py
 ```
 
-## Pose-S3 and fusion
+## Pose-S3 and Fusion
 
 ```text
 scripts/data/prepare_pose_s3.py

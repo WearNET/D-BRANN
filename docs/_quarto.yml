@@ -34,7 +34,7 @@ website:
         contents:
           - training.qmd
           - evaluation.qmd
-      - section: "Xsens integration"
+      - section: "Xsens Integration"
         contents:
           - xsens-calibration.qmd
           - xsens-live-inference.qmd

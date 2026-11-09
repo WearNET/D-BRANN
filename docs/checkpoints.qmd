@@ -6,7 +6,7 @@ This directory contains the validated model weights used by the current D-BRANN 
 
 Unlike the datasets, the final D-BRANN checkpoints are tracked in the repository so the trained architecture can be evaluated without retraining every stage. The original TransPose checkpoint is the exception: it is third-party and is **not** distributed here (see below).
 
-## Directory structure
+## Directory Structure
 
 ```text
 checkpoints/
@@ -19,7 +19,7 @@ checkpoints/
 └── retrained/                      # New training runs (gitignored, see below)
 ```
 
-## Original TransPose checkpoint
+## Original TransPose Checkpoint
 
 ```text
 checkpoints/transpose_original/weights.pt
@@ -79,7 +79,7 @@ checkpoints/dbran_pose_s3/
 
 Pose-S3 estimates reduced-joint 6D rotations through five anatomical branches. The final Pose-S3 configuration uses a recurrent hidden size of 16.
 
-## Learned rotation fusion
+## Learned Rotation Fusion
 
 ```text
 checkpoints/dbran_fusion/
@@ -97,7 +97,7 @@ hidden_size: 16
 use_pose_s2_position: False
 ```
 
-## Centralized checkpoint paths
+## Centralized Checkpoint Paths
 
 All checkpoint locations are defined in `main_path.py`:
 
@@ -117,4 +117,4 @@ New training runs should be saved under `checkpoints/retrained/`. This directory
 
 Pose-S1 and Pose-S2 training default `--save_dir` to `checkpoints/retrained/`, so a default run never touches the validated checkpoints above. Pose-S3 and fusion training require an explicit `--save_dir`; pointing it at `checkpoints/dbran_pose_s3/` or `checkpoints/dbran_fusion/` overwrites the validated checkpoint, so always redirect it to a new or `checkpoints/retrained/`-style directory when reproducing the study.
 
-See [Evaluation and profiling](evaluation.qmd#smoke-test) for the smoke test that loads this whole checkpoint set and confirms it works end to end.
+See [Evaluation and Profiling](evaluation.qmd#smoke-test) for the smoke test that loads this whole checkpoint set and confirms it works end to end.
