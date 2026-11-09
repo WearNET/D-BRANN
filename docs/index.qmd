@@ -7,6 +7,10 @@ subtitle: "Distributed pose estimation from sparse IMUs"
 
 D-BRANN builds on the excellent work of [TransPose](https://github.com/Xinyu-Yi/TransPose) (Yi et al.), whose centralized architecture and translation modules (Trans-B1, Trans-B2) form the foundation this project extends into a distributed, branch-based design.
 
+**Paper:** K. Niño-Tejada, J. L. Rivas-Caicedo, L. Saldaña-Aristizábal, and J. F. Patarroyo-Montenegro, "[D-BRANN: A Distributed Bidirectional Recurrent Neural Network for Full-Body Joint Angle Estimation from Sparse Inertial Measurement Units](https://doi.org/10.3390/electronics15215112)," *Electronics*, vol. 15, no. 21, p. 5112, 2026.
+
+**Dataset:** [MoCap and IMU Dataset for Upper Limb Joint Angle Estimation](https://doi.org/10.5281/zenodo.15778950), Zenodo (2025).
+
 ![Centralized joint-angle estimation (A) versus the proposed distributed D-BRANN (B).](figures/centralized-vs-distributed.png){fig-alt="Side-by-side comparison: in (A) all wearable sensor streams feed one centralized network that outputs SMPL joint rotations; in (B) each sensor feeds its own three-stage local inference branch, the shared root IMU is shared across branches, and a residual fusion module produces the SMPL joint rotations."}
 
 D-BRANN estimates full-body pose using six IMUs placed on:
@@ -60,3 +64,32 @@ The resulting parameter ratio is **0.3341**, corresponding to approximately **66
 - [Training and data preparation](training.qmd) — the staged training workflow
 - [Evaluation and profiling](evaluation.qmd) — running the smoke test and full evaluation
 - [Xsens integration](xsens-calibration.qmd) — calibration, live inference, and Unity streaming
+
+## Citation
+
+If you use D-BRANN in your research, please cite the paper ([DOI: 10.3390/electronics15215112](https://doi.org/10.3390/electronics15215112)):
+
+```bibtex
+@article{ninotejada2026dbrann,
+  author  = {Ni{\~n}o-Tejada, Kevin and Rivas-Caicedo, Jhonathan L. and Salda{\~n}a-Aristiz{\'a}bal, Laura and Patarroyo-Montenegro, Juan F.},
+  title   = {{D-BRANN}: A Distributed Bidirectional Recurrent Neural Network for Full-Body Joint Angle Estimation from Sparse Inertial Measurement Units},
+  journal = {Electronics},
+  year    = {2026},
+  volume  = {15},
+  number  = {21},
+  pages   = {5112},
+  doi     = {10.3390/electronics15215112}
+}
+```
+
+If you use the dataset, please also cite it ([DOI: 10.5281/zenodo.15778950](https://doi.org/10.5281/zenodo.15778950)):
+
+```bibtex
+@misc{ninotejada2025mocap,
+  author    = {Ni{\~n}o-Tejada, Kevin and Salda{\~n}a-Aristiz{\'a}bal, Laura and Rivas-Caicedo, Jhonathan L. and Patarroyo-Montenegro, Juan F.},
+  title     = {{MoCap and IMU Dataset for Upper Limb Joint Angle Estimation}},
+  year      = {2025},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.15778950}
+}
+```
