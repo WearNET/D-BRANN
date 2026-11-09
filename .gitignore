@@ -61,6 +61,10 @@ data/example/
 # New training outputs
 checkpoints/retrained/
 
+# Original TransPose weights (third-party, not redistributed; download from
+# the TransPose authors, see docs/checkpoints.qmd)
+checkpoints/transpose_original/
+
 # Experiment outputs
 results/
 wandb/

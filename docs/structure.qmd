@@ -6,7 +6,7 @@ title: "Repository structure"
 D-BRANN/
 ├── articulate/                     # SMPL, kinematics, math, and evaluation utilities
 ├── checkpoints/
-│   ├── transpose_original/
+│   ├── transpose_original/         # TransPose weights, downloaded separately (not in Git)
 │   ├── dbran_pose_s1/
 │   ├── dbran_pose_s2/
 │   ├── dbran_pose_s3/

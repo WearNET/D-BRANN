@@ -4,14 +4,13 @@ title: "Checkpoints"
 
 This directory contains the validated model weights used by the current D-BRANN pipeline.
 
-Unlike the datasets, the final checkpoints are tracked in the repository so the trained architecture can be evaluated without retraining every stage.
+Unlike the datasets, the final D-BRANN checkpoints are tracked in the repository so the trained architecture can be evaluated without retraining every stage. The original TransPose checkpoint is the exception: it is third-party and is **not** distributed here (see below).
 
 ## Directory structure
 
 ```text
 checkpoints/
-├── README.md
-├── transpose_original/
+├── transpose_original/             # Not distributed: download separately (gitignored)
 │   └── weights.pt
 ├── dbran_pose_s1/
 ├── dbran_pose_s2/
@@ -26,7 +25,7 @@ checkpoints/
 checkpoints/transpose_original/weights.pt
 ```
 
-This checkpoint contains the original TransPose model parameters.
+This checkpoint contains the original TransPose model parameters. It belongs to the TransPose authors and is not redistributed with this repository. Download it from the [official TransPose release](https://xinyu-yi.github.io/TransPose/files/weights.pt) (see the [TransPose repository](https://github.com/Xinyu-Yi/TransPose) for details) and place it at the path above. It is required by the full pipeline (translation modules) and by the centralized baseline.
 
 In the current D-BRANN pipeline:
 
