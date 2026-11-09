@@ -65,6 +65,12 @@ The resulting parameter ratio is **0.3341**, corresponding to approximately **66
 - [Evaluation and profiling](evaluation.qmd) — running the smoke test and full evaluation
 - [Xsens integration](xsens-calibration.qmd) — calibration, live inference, and Unity streaming
 
+## License
+
+The source code is released under the [GNU General Public License v3.0](https://github.com/WearNET/D-BRANN/blob/main/LICENSE), as it builds on [TransPose](https://github.com/Xinyu-Yi/TransPose), which is distributed under the same license.
+
+Third-party assets are **not** covered by this license and are subject to their own terms: the SMPL model, the AMASS, DIP-IMU and TotalCapture datasets, and the original TransPose checkpoint. They are not redistributed here and must be obtained from their official sources. The MoCap and IMU dataset is released on Zenodo under CC BY 4.0.
+
 ## Citation
 
 If you use D-BRANN in your research, please cite the paper ([DOI: 10.3390/electronics15215112](https://doi.org/10.3390/electronics15215112)):

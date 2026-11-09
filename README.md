@@ -26,7 +26,9 @@ This research received financial support from the NSF CAREER Intelligent Biomark
 
 ## License
 
-License information will be added after the terms of the upstream source code, datasets, SMPL assets, and derived checkpoint distribution have been fully reviewed.
+The source code is released under the [GNU General Public License v3.0](LICENSE), as it builds on [TransPose](https://github.com/Xinyu-Yi/TransPose), which is distributed under the same license.
+
+Third-party assets are **not** covered by this license and are subject to their own terms: the SMPL model, the AMASS, DIP-IMU and TotalCapture datasets, and the original TransPose checkpoint. They are not redistributed here and must be obtained from their official sources. The MoCap and IMU dataset is released on Zenodo under CC BY 4.0.
 
 ---
 
